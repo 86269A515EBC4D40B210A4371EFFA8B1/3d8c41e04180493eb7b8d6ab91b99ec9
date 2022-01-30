@@ -7,8 +7,8 @@ import { ControlErrorDirective } from "./control-error.directive";
 @Component({
   selector: "app-control-errors",
   template: `
-    <label for="email" class="invalid-feedback d-block">
-      <ng-container *ngTemplateOutlet="template$ | async"></ng-container>
+    <label *ngIf="templateWithContext$ | async as data" class="invalid-feedback d-block">
+      <ng-container *ngTemplateOutlet="data[0]; context: data[1]"></ng-container>
     </label>
   `,
 })
@@ -22,29 +22,32 @@ export class ControlErrorsComponent {
   private contentInit$ = new ReplaySubject<void>(1);
   private control$ = new ReplaySubject<AbstractControl>(1);
 
-  template$ = this.contentInit$.pipe(
+  templateWithContext$ = this.contentInit$.pipe(
     switchMap(() => this.control$),
     switchMap((control) => this.getControlChanges(control)),
-    map((control) => (control.errors ? this.getFirstError(control) : null)),
-    map((error) => (error ? this.getTemplate(error[0], error[1]) : null))
+    map((control) => this.getErrorKeyAndData(control)),
+    map((error) => (error ? this.getTemplateWithContext(error[0], error[1]) : null))
   );
 
   ngAfterContentInit() {
     this.contentInit$.next();
   }
 
-  private getTemplate<T>(errorKey: string, errorData: T): TemplateRef<T> | null {
+  private getTemplateWithContext<T>(errorKey: string, errorData: T): [TemplateRef<T>, { $implicit: T }] | null {
     const controlError = this.controlErrors.find((controlError) => controlError.errorKey === errorKey);
 
     if (controlError === void 0) {
       return null;
     }
 
-    return controlError.template as TemplateRef<T>;
+    return [controlError.template as TemplateRef<T>, { $implicit: errorData }];
   }
 
-  private getFirstError(control: AbstractControl): [string, any] {
-    const errorKey = Object.keys(control.errors!)[0];
+  private getErrorKeyAndData(control: AbstractControl): [string, any] | null {
+    if (control.errors === null) {
+      return null;
+    }
+    const errorKey = Object.keys(control.errors)[0];
     const errorData = control.getError(errorKey);
     return [errorKey, errorData];
   }

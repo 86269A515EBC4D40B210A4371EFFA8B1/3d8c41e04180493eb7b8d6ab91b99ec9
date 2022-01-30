@@ -12,8 +12,8 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
           <app-control-errors [control]="form.get('email')!">
             <ng-template appControlError="required"> Adres e-mail jest wymagany </ng-template>
 
-            <ng-template appControlError="minlength">
-              Adres e-mail jest musi składać się minimum z ??? znaków
+            <ng-template appControlError="minlength" let-error>
+              Adres e-mail jest musi składać się minimum z {{ error.requiredLength }} znaków
             </ng-template>
 
             <ng-template appControlError="email"> Adres e-mail jest niepoprawny </ng-template>
@@ -22,7 +22,6 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
       </form>
     </div>
   `,
-  styles: [],
 })
 export class AppComponent {
   form = new FormGroup({
