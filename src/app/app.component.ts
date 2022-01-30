@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn, ValidationErrors, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -30,18 +30,54 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
               Hasło musi składać się mimimum z {{ error.requiredLength }} znaków
             </ng-template>
           </app-control-errors>
+
+          <app-control-errors [control]="form">
+            <ng-template appControlError="checkPassword"> Wprowadzone hasła nie pasują do siebie </ng-template>
+          </app-control-errors>
         </div>
 
-        <div>
-          <button class="btn btn-primary" [disabled]="!form.valid">Wyślij</button>
+        <div class="mb-3">
+          <label for="repeatPassword">Powtórz hasło</label>
+          <input class="form-control" formControlName="repeatPassword" id="repeatPassword" autocomplete="off" />
+          <app-control-errors [control]="form.get('repeatPassword')!">
+            <ng-template appControlError="required"> Hasło jest wymagane </ng-template>
+
+            <ng-template appControlError="minlength" let-error>
+              Hasło musi składać się mimimum z {{ error.requiredLength }} znaków
+            </ng-template>
+          </app-control-errors>
+
+          <app-control-errors [control]="form">
+            <ng-template appControlError="checkPassword"> Wprowadzone hasła nie pasują do siebie </ng-template>
+          </app-control-errors>
         </div>
+
+        <button class="btn btn-primary" [disabled]="!form.valid">Wyślij</button>
+        {{ form.pristine }}
       </form>
     </div>
   `,
 })
 export class AppComponent {
-  form = new FormGroup({
-    email: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.email]),
-    password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
-  });
+  form = new FormGroup(
+    {
+      email: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.email]),
+      password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
+      repeatPassword: new FormControl(null, [Validators.required, Validators.minLength(8)]),
+    },
+    { validators: [checkPasswordValidator()] },
+  );
+}
+
+function checkPasswordValidator(): ValidatorFn {
+  return (form: AbstractControl): ValidationErrors | null => {
+    const password = form.get('password')!;
+    const repeatPassword = form.get('repeatPassword')!;
+
+    if (password.value !== repeatPassword.value) {
+      return { checkPassword: true };
+    }
+
+    return null;
+  };
 }

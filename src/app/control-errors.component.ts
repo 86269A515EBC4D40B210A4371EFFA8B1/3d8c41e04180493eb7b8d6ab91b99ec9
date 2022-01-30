@@ -1,11 +1,11 @@
-import { Component, ContentChildren, Input, QueryList, TemplateRef } from "@angular/core";
-import { AbstractControl } from "@angular/forms";
-import { Observable, ReplaySubject } from "rxjs";
-import { filter, map, mapTo, startWith, switchMap } from "rxjs/operators";
-import { ControlErrorDirective } from "./control-error.directive";
+import { Component, ContentChildren, Input, QueryList, TemplateRef } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
+import { Observable, ReplaySubject } from 'rxjs';
+import { filter, map, mapTo, startWith, switchMap, tap } from 'rxjs/operators';
+import { ControlErrorDirective } from './control-error.directive';
 
 @Component({
-  selector: "app-control-errors",
+  selector: 'app-control-errors',
   template: `
     <label *ngIf="templateWithContext$ | async as data" class="invalid-feedback d-block">
       <ng-container *ngTemplateOutlet="data[0]; context: data[1]"></ng-container>
@@ -24,10 +24,11 @@ export class ControlErrorsComponent {
 
   templateWithContext$ = this.contentInit$.pipe(
     switchMap(() => this.control$),
+    tap(console.log),
     switchMap((control) => this.getControlChanges(control)),
     filter((control) => control.pristine === false),
     map((control) => this.getErrorKeyAndData(control)),
-    map((error) => (error ? this.getTemplateWithContext(error[0], error[1]) : null))
+    map((error) => (error ? this.getTemplateWithContext(error[0], error[1]) : null)),
   );
 
   ngAfterContentInit() {
