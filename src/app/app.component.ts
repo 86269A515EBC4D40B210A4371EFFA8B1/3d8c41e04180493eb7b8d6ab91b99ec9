@@ -1,8 +1,8 @@
-import { Component } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Component } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
-  selector: "app-root",
+  selector: 'app-root',
   template: `
     <div class="container mt-5">
       <form [formGroup]="form">
@@ -44,8 +44,4 @@ export class AppComponent {
     email: new FormControl(null, [Validators.required, Validators.minLength(3), Validators.email]),
     password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
   });
-
-  constructor() {
-    this.form.markAllAsTouched();
-  }
 }
