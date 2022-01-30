@@ -1,7 +1,7 @@
 import { Component, ContentChildren, Input, QueryList, TemplateRef } from "@angular/core";
 import { AbstractControl } from "@angular/forms";
 import { Observable, ReplaySubject } from "rxjs";
-import { map, mapTo, startWith, switchMap } from "rxjs/operators";
+import { filter, map, mapTo, startWith, switchMap } from "rxjs/operators";
 import { ControlErrorDirective } from "./control-error.directive";
 
 @Component({
@@ -25,6 +25,7 @@ export class ControlErrorsComponent {
   templateWithContext$ = this.contentInit$.pipe(
     switchMap(() => this.control$),
     switchMap((control) => this.getControlChanges(control)),
+    filter((control) => control.pristine === false),
     map((control) => this.getErrorKeyAndData(control)),
     map((error) => (error ? this.getTemplateWithContext(error[0], error[1]) : null))
   );
