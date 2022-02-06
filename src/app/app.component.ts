@@ -65,11 +65,11 @@ export class AppComponent {
       password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
       repeatPassword: new FormControl(null, [Validators.required, Validators.minLength(8)]),
     },
-    { validators: [checkPasswordValidator()] },
+    { validators: [passwordAndRepeatPasswordAreTheSameValidator()] },
   );
 }
 
-function checkPasswordValidator(): ValidatorFn {
+function passwordAndRepeatPasswordAreTheSameValidator(): ValidatorFn {
   return (form: AbstractControl): ValidationErrors | null => {
     const password = form.get('password')!;
     const repeatPassword = form.get('repeatPassword')!;
