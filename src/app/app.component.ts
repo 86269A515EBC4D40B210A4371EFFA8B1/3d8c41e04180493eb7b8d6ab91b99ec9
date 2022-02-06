@@ -29,9 +29,7 @@ import { FormGroup, FormControl, Validators, ValidatorFn, ValidationErrors, Abst
             <ng-template appControlError="minlength" let-error>
               Hasło musi składać się mimimum z {{ error.requiredLength }} znaków
             </ng-template>
-          </app-control-errors>
 
-          <app-control-errors [control]="form">
             <ng-template appControlError="passwordAndRepeatPasswordAreTheSame">
               Wprowadzone hasła nie pasują do siebie
             </ng-template>
@@ -47,9 +45,7 @@ import { FormGroup, FormControl, Validators, ValidatorFn, ValidationErrors, Abst
             <ng-template appControlError="minlength" let-error>
               Hasło musi składać się mimimum z {{ error.requiredLength }} znaków
             </ng-template>
-          </app-control-errors>
 
-          <app-control-errors [control]="form">
             <ng-template appControlError="passwordAndRepeatPasswordAreTheSame">
               Wprowadzone hasła nie pasują do siebie
             </ng-template>
@@ -57,7 +53,6 @@ import { FormGroup, FormControl, Validators, ValidatorFn, ValidationErrors, Abst
         </div>
 
         <button class="btn btn-primary" [disabled]="!form.valid">Wyślij</button>
-        {{ form.pristine }}
       </form>
     </div>
   `,

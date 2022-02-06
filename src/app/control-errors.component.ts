@@ -35,6 +35,15 @@ export class ControlErrorsComponent {
     this.contentInit$.next();
   }
 
+  private getErrorKeyAndData(control: AbstractControl): [string, any] | null {
+    if (control.errors === null) {
+      return control.parent ? this.getErrorKeyAndData(control.parent) : null;
+    }
+    const errorKey = Object.keys(control.errors)[0];
+    const errorData = control.getError(errorKey);
+    return [errorKey, errorData];
+  }
+
   private getTemplateWithContext<T>(errorKey: string, errorData: T): [TemplateRef<T>, { $implicit: T }] | null {
     const controlError = this.controlErrors.find((controlError) => controlError.errorKey === errorKey);
 
@@ -45,16 +54,8 @@ export class ControlErrorsComponent {
     return [controlError.template as TemplateRef<T>, { $implicit: errorData }];
   }
 
-  private getErrorKeyAndData(control: AbstractControl): [string, any] | null {
-    if (control.errors === null) {
-      return null;
-    }
-    const errorKey = Object.keys(control.errors)[0];
-    const errorData = control.getError(errorKey);
-    return [errorKey, errorData];
-  }
-
   private getControlChanges(control: AbstractControl): Observable<AbstractControl> {
-    return control.valueChanges.pipe(startWith(control.value), mapTo(control));
+    const root = control.root ?? control;
+    return root.valueChanges.pipe(startWith(control.value), mapTo(control));
   }
 }
