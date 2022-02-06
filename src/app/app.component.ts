@@ -10,13 +10,9 @@ import { FormGroup, FormControl, Validators, ValidatorFn, ValidationErrors, Abst
           <label for="email">E-mail</label>
           <input class="form-control" formControlName="email" id="email" autocomplete="off" />
           <app-control-errors [control]="form.get('email')!">
-            <ng-template appControlError="required"> Adres e-mail jest wymagany </ng-template>
-
-            <ng-template appControlError="minlength" let-error>
-              Adres e-mail jest musi składać się minimum z {{ error.requiredLength }} znaków
-            </ng-template>
-
-            <ng-template appControlError="email"> Adres e-mail jest niepoprawny </ng-template>
+            <app-required *appControlError="'required'"></app-required>
+            <app-minlength *appControlError="'minlength'; let error" [error]="error"></app-minlength>
+            <app-email *appControlError="'email'"></app-email>
           </app-control-errors>
         </div>
 
@@ -24,11 +20,8 @@ import { FormGroup, FormControl, Validators, ValidatorFn, ValidationErrors, Abst
           <label for="password">Hasło</label>
           <input class="form-control" formControlName="password" id="password" autocomplete="off" />
           <app-control-errors [control]="form.get('password')!">
-            <ng-template appControlError="required"> Hasło jest wymagane </ng-template>
-
-            <ng-template appControlError="minlength" let-error>
-              Hasło musi składać się mimimum z {{ error.requiredLength }} znaków
-            </ng-template>
+            <app-required *appControlError="'required'"></app-required>
+            <app-minlength *appControlError="'minlength'; let error" [error]="error"></app-minlength>
           </app-control-errors>
         </div>
 
@@ -36,12 +29,8 @@ import { FormGroup, FormControl, Validators, ValidatorFn, ValidationErrors, Abst
           <label for="repeatPassword">Powtórz hasło</label>
           <input class="form-control" formControlName="repeatPassword" id="repeatPassword" autocomplete="off" />
           <app-control-errors [control]="form.get('repeatPassword')!">
-            <ng-template appControlError="required"> Hasło jest wymagane </ng-template>
-
-            <ng-template appControlError="minlength" let-error>
-              Hasło musi składać się mimimum z {{ error.requiredLength }} znaków
-            </ng-template>
-
+            <app-required *appControlError="'required'"></app-required>
+            <app-minlength *appControlError="'minlength'; let error" [error]="error"></app-minlength>
             <ng-template appControlError="passwordAndRepeatPasswordAreTheSame">
               Wprowadzone hasła nie pasują do siebie
             </ng-template>
