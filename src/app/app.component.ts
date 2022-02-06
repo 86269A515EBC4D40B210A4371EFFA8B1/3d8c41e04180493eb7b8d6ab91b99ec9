@@ -29,10 +29,6 @@ import { FormGroup, FormControl, Validators, ValidatorFn, ValidationErrors, Abst
             <ng-template appControlError="minlength" let-error>
               Hasło musi składać się mimimum z {{ error.requiredLength }} znaków
             </ng-template>
-
-            <ng-template appControlError="passwordAndRepeatPasswordAreTheSame">
-              Wprowadzone hasła nie pasują do siebie
-            </ng-template>
           </app-control-errors>
         </div>
 

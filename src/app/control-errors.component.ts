@@ -1,4 +1,4 @@
-import { Component, ContentChildren, Input, QueryList, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ContentChildren, Input, QueryList, TemplateRef } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, map, mapTo, startWith, switchMap, tap } from 'rxjs/operators';
@@ -11,6 +11,7 @@ import { ControlErrorDirective } from './control-error.directive';
       <ng-container *ngTemplateOutlet="data[0]; context: data[1]"></ng-container>
     </label>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlErrorsComponent {
   @Input() set control(control: AbstractControl) {
@@ -24,7 +25,6 @@ export class ControlErrorsComponent {
 
   templateWithContext$ = this.contentInit$.pipe(
     switchMap(() => this.control$),
-    tap(console.log),
     switchMap((control) => this.getControlChanges(control)),
     filter((control) => control.pristine === false),
     map((control) => this.getErrorKeyAndData(control)),
