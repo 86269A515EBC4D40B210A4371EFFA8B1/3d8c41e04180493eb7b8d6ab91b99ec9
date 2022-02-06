@@ -32,7 +32,9 @@ import { FormGroup, FormControl, Validators, ValidatorFn, ValidationErrors, Abst
           </app-control-errors>
 
           <app-control-errors [control]="form">
-            <ng-template appControlError="checkPassword"> Wprowadzone hasła nie pasują do siebie </ng-template>
+            <ng-template appControlError="passwordAndRepeatPasswordAreTheSame">
+              Wprowadzone hasła nie pasują do siebie
+            </ng-template>
           </app-control-errors>
         </div>
 
@@ -48,7 +50,9 @@ import { FormGroup, FormControl, Validators, ValidatorFn, ValidationErrors, Abst
           </app-control-errors>
 
           <app-control-errors [control]="form">
-            <ng-template appControlError="checkPassword"> Wprowadzone hasła nie pasują do siebie </ng-template>
+            <ng-template appControlError="passwordAndRepeatPasswordAreTheSame">
+              Wprowadzone hasła nie pasują do siebie
+            </ng-template>
           </app-control-errors>
         </div>
 
@@ -75,7 +79,7 @@ function passwordAndRepeatPasswordAreTheSameValidator(): ValidatorFn {
     const repeatPassword = form.get('repeatPassword')!;
 
     if (password.value !== repeatPassword.value) {
-      return { checkPassword: true };
+      return { passwordAndRepeatPasswordAreTheSame: true };
     }
 
     return null;
