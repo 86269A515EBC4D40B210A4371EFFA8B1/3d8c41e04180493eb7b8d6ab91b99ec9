@@ -1,0 +1,33 @@
+<div class="container mt-5">
+  <form [formGroup]="form">
+    <div class="mb-3">
+      <label for="email">Email</label>
+      <input class="form-control" formControlName="email" id="email" autocomplete="off" />
+      <label *appIfError="'required'; in: form.get('email')!" for="email" class="invalid-feedback d-block">
+        Adres e-mail jest wymagany
+      </label>
+      <label *appIfError="'email'; in: form.get('email')!" for="email" class="invalid-feedback d-block">
+        Adres e-mail jest niepoprawny
+      </label>
+      <label *appIfError="'minlength' as error; in: form.get('email')!" for="email" class="invalid-feedback d-block">
+        Adres e-mail jest musi składać się minimum z
+        {{ error.requiredLength }} znaków
+      </label>
+    </div>
+    <div class="mb-3">
+      <label for="password">Password</label>
+      <input class="form-control" formControlName="password" id="password" autocomplete="off" />
+      <label *appIfError="'required'; in: form.get('password')!" for="password" class="invalid-feedback d-block">
+        Podanie hasła jest wymagane
+      </label>
+      <label
+        *appIfError="'minlength' as error; in: form.get('password')!"
+        for="password"
+        class="invalid-feedback d-block"
+      >
+        Podane hasło musi składać się minimum z
+        {{ error.requiredLength }} znaków
+      </label>
+    </div>
+  </form>
+</div>

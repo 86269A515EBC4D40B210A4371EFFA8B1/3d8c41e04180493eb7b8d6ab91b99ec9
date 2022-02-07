@@ -1,13 +1,11 @@
-import { NgModule } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
-import { BrowserModule } from "@angular/platform-browser";
-
-import { AppComponent } from "./app.component";
-import { ControlErrorDirective } from "./control-error.directive";
-import { ControlErrorsComponent } from "./control-errors.component";
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent } from './app.component';
+import { IfErrorDirective } from './if-error.directive';
 
 @NgModule({
-  declarations: [AppComponent, ControlErrorDirective, ControlErrorsComponent],
+  declarations: [AppComponent, IfErrorDirective],
   imports: [BrowserModule, ReactiveFormsModule],
   bootstrap: [AppComponent],
 })
