@@ -5,24 +5,20 @@
     <div class="mb-3">
       <label for="email">Email</label>
       <input class="form-control" formControlName="email" id="email" autocomplete="off" />
-      <app-required *appIfError="'required'; in: form.get('email')!" for="email"></app-required>
-      <app-email *appIfError="'email'; in: form.get('email')!" for="email"></app-email>
-      <app-minlength
-        *appIfError="'minlength' as error; in: form.get('email')!"
-        for="email"
-        [error]="error"
-      ></app-minlength>
+      <ng-container [appControlErrors]="form.get('email')!">
+        <app-required *appIfError="'required'" for="email"></app-required>
+        <app-email *appIfError="'email'" for="email"></app-email>
+        <app-minlength *appIfError="'minlength' as error" for="email" [error]="error"></app-minlength>
+      </ng-container>
     </div>
 
     <div class="mb-3">
       <label for="password">Password</label>
       <input class="form-control" formControlName="password" id="password" autocomplete="off" />
-      <app-required *appIfError="'required'; in: form.get('password')!" for="password"></app-required>
-      <app-minlength
-        *appIfError="'minlength' as error; in: form.get('password')!"
-        for="password"
-        [error]="error"
-      ></app-minlength>
+      <ng-container [appControlErrors]="form.get('password')!">
+        <app-required *appIfError="'required'" for="password"></app-required>
+        <app-minlength *appIfError="'minlength' as error" for="password" [error]="error"></app-minlength>
+      </ng-container>
     </div>
   </form>
 </div>

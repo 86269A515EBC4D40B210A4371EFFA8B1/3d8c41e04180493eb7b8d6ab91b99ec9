@@ -1,17 +1,26 @@
-import { Directive, OnChanges, OnDestroy, Input, ViewContainerRef, TemplateRef } from '@angular/core';
+import { Directive, OnChanges, OnDestroy, Input, ViewContainerRef, TemplateRef, Optional, Host } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Subscription, startWith } from 'rxjs';
+import { ControlErrorsDirective } from './control-errors.directive';
 
 @Directive({
   selector: '[appIfError]',
 })
 export class IfErrorDirective<T = unknown> implements OnChanges, OnDestroy {
   @Input('appIfError') errorKey!: string;
-  @Input('appIfErrorIn') control!: AbstractControl;
+  @Input('appIfErrorIn') controlFromInput?: AbstractControl;
 
   private activeSubscription = new Subscription();
 
-  constructor(private viewContainer: ViewContainerRef, private templateRef: TemplateRef<{ appIfError: T }>) {}
+  get control(): AbstractControl {
+    return this.controlFromInput ?? this.controlErrorsDirective?.control ?? this.throwError();
+  }
+
+  constructor(
+    private viewContainer: ViewContainerRef,
+    private templateRef: TemplateRef<{ appIfError: T }>,
+    @Optional() @Host() private controlErrorsDirective: ControlErrorsDirective | null,
+  ) {}
 
   ngOnChanges() {
     this.activeSubscription.unsubscribe();
@@ -47,5 +56,9 @@ export class IfErrorDirective<T = unknown> implements OnChanges, OnDestroy {
 
   private removeError(): void {
     this.viewContainer.clear();
+  }
+
+  private throwError(): never {
+    throw new Error('No control provided');
   }
 }
