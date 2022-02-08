@@ -7,14 +7,22 @@
       <input class="form-control" formControlName="email" id="email" autocomplete="off" />
       <app-required *appIfError="'required'; in: form.get('email')!" for="email"></app-required>
       <app-email *appIfError="'email'; in: form.get('email')!" for="email"></app-email>
-      <app-minlength *appIfError="'minlength' as error; in: form.get('email')!" for="email"></app-minlength>
+      <app-minlength
+        *appIfError="'minlength' as error; in: form.get('email')!"
+        for="email"
+        [error]="error"
+      ></app-minlength>
     </div>
 
     <div class="mb-3">
       <label for="password">Password</label>
       <input class="form-control" formControlName="password" id="password" autocomplete="off" />
       <app-required *appIfError="'required'; in: form.get('password')!" for="password"></app-required>
-      <app-minlength *appIfError="'minlength' as error; in: form.get('password')!" for="password"></app-minlength>
+      <app-minlength
+        *appIfError="'minlength' as error; in: form.get('password')!"
+        for="password"
+        [error]="error"
+      ></app-minlength>
     </div>
   </form>
 </div>
