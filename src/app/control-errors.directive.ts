@@ -6,4 +6,5 @@ import { AbstractControl } from '@angular/forms';
 })
 export class ControlErrorsDirective {
   @Input('appControlErrors') control!: AbstractControl;
+  @Input() for?: string;
 }
