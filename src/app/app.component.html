@@ -6,7 +6,7 @@
       <label for="email">Email</label>
       <input class="form-control" formControlName="email" id="email" autocomplete="off" />
       <ng-container [appControlErrors]="form.get('email')!">
-        <app-required *appIfError="'required'" for="email"></app-required>
+        <!-- <app-required *appIfError="'required'" for="email"></app-required> -->
         <app-email *appIfError="'email'" for="email"></app-email>
         <app-minlength *appIfError="'minlength' as error" for="email" [error]="error"></app-minlength>
       </ng-container>
@@ -16,7 +16,7 @@
       <label for="password">Password</label>
       <input class="form-control" formControlName="password" id="password" autocomplete="off" />
       <ng-container [appControlErrors]="form.get('password')!">
-        <app-required *appIfError="'required'" for="password"></app-required>
+        <!-- <app-required *appIfError="'required'" for="password"></app-required> -->
         <app-minlength *appIfError="'minlength' as error" for="password" [error]="error"></app-minlength>
       </ng-container>
     </div>
