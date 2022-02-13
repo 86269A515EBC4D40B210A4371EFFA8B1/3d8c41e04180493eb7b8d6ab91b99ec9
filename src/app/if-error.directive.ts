@@ -1,7 +1,7 @@
 import { Directive, OnChanges, OnDestroy, Input, ViewContainerRef, TemplateRef, Optional, Host } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Subscription, startWith } from 'rxjs';
-import { ControlErrorsDirective } from './control-errors.directive';
+import { ControlErrorsComponent } from './control-errors.component';
 
 @Directive({
   selector: '[appIfError]',
@@ -13,13 +13,13 @@ export class IfErrorDirective<T = unknown> implements OnChanges, OnDestroy {
   private activeSubscription = new Subscription();
 
   get control(): AbstractControl {
-    return this.controlFromInput ?? this.controlErrorsDirective?.control ?? this.throwError();
+    return this.controlFromInput ?? this.controlErrorsComponent?.control ?? this.throwError();
   }
 
   constructor(
     private viewContainer: ViewContainerRef,
     private templateRef: TemplateRef<{ appIfError: T }>,
-    @Optional() @Host() private controlErrorsDirective: ControlErrorsDirective | null,
+    @Optional() @Host() private controlErrorsComponent: ControlErrorsComponent | null,
   ) {}
 
   ngOnChanges() {

@@ -5,20 +5,20 @@
     <div class="mb-3">
       <label for="email">Email</label>
       <input class="form-control" formControlName="email" id="email" autocomplete="off" />
-      <ng-container [appControlErrors]="form.get('email')!" for="email">
+      <app-control-errors [control]="form.get('email')!" for="email">
         <app-required *appIfError="'required'"></app-required>
         <app-email *appIfError="'email'"></app-email>
         <app-minlength *appIfError="'minlength' as error" [error]="error"></app-minlength>
-      </ng-container>
+      </app-control-errors>
     </div>
 
     <div class="mb-3">
       <label for="password">Password</label>
       <input class="form-control" formControlName="password" id="password" autocomplete="off" />
-      <ng-container [appControlErrors]="form.get('password')!" for="password">
+      <app-control-errors [control]="form.get('password')!" for="password">
         <app-required *appIfError="'required'"></app-required>
         <app-minlength *appIfError="'minlength' as error" [error]="error"></app-minlength>
-      </ng-container>
+      </app-control-errors>
     </div>
   </form>
 </div>
