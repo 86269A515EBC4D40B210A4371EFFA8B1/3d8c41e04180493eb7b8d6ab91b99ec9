@@ -1,5 +1,8 @@
-import { Component, Host, Input, Optional } from '@angular/core';
+import { Component, Host, Inject, Input, Optional } from '@angular/core';
 import { ControlErrorsComponent } from '../control-errors.component';
+import { ERROR_DATA } from '../error.tokens';
+
+type ErrorSchema = { requiredLength: number };
 
 @Component({
   selector: 'app-minlength',
@@ -10,12 +13,23 @@ import { ControlErrorsComponent } from '../control-errors.component';
   `,
 })
 export class MinlengthComponent {
-  @Input() error!: { requiredLength: number };
+  @Input('error') errorFromInput?: ErrorSchema;
   @Input(`for`) forFromInput?: string;
 
   get for(): string | undefined {
     return this.container?.for || this.forFromInput;
   }
 
-  constructor(@Optional() @Host() private container: ControlErrorsComponent | null) {}
+  get error(): ErrorSchema {
+    return this.errorFromInput ?? this.injectedErrors ?? this.throwError();
+  }
+
+  constructor(
+    @Optional() @Inject(ERROR_DATA) private injectedErrors: ErrorSchema | null,
+    @Optional() @Host() private container: ControlErrorsComponent | null,
+  ) {}
+
+  private throwError(): never {
+    throw new Error('Not error data prvodided');
+  }
 }
