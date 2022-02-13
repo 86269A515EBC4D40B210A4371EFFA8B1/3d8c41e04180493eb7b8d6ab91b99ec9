@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Host, Input, Optional } from '@angular/core';
+import { ControlErrorsComponent } from '../control-errors.component';
 
 @Component({
   selector: 'app-minlength',
@@ -9,6 +10,12 @@ import { Component, Input } from '@angular/core';
   `,
 })
 export class MinlengthComponent {
-  @Input() for?: string;
   @Input() error!: { requiredLength: number };
+  @Input(`for`) forFromInput?: string;
+
+  get for(): string | undefined {
+    return this.container?.for || this.forFromInput;
+  }
+
+  constructor(@Optional() @Host() private container: ControlErrorsComponent | null) {}
 }

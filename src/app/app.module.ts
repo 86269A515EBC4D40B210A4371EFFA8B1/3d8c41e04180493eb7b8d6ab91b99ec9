@@ -6,10 +6,17 @@ import { IfErrorDirective } from './if-error.directive';
 import { RequiredComponent } from './errors/required.component';
 import { MinlengthComponent } from './errors/minlength.component';
 import { EmailComponent } from './errors/email.component';
-import { ControlErrorsDirective } from './control-errors.directive';
+import { ControlErrorsComponent } from './control-errors.component';
 
 @NgModule({
-  declarations: [AppComponent, IfErrorDirective, RequiredComponent, MinlengthComponent, EmailComponent, ControlErrorsDirective],
+  declarations: [
+    AppComponent,
+    IfErrorDirective,
+    RequiredComponent,
+    MinlengthComponent,
+    EmailComponent,
+    ControlErrorsComponent,
+  ],
   imports: [BrowserModule, ReactiveFormsModule],
   bootstrap: [AppComponent],
 })
