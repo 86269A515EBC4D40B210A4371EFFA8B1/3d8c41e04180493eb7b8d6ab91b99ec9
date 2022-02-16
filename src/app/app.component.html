@@ -5,7 +5,11 @@
     <div class="mb-3">
       <label for="email">Email</label>
       <input class="form-control" formControlName="email" id="email" autocomplete="off" />
-      <app-control-errors [control]="form.get('email')!" for="email"></app-control-errors>
+      <app-control-errors [control]="form.get('email')!" for="email">
+        <label *appIfError="'maxlength' as error" class="d-block invalid-feedback">
+          Można wprowadzić maksymalnie {{ error.requiredLength }} znaków
+        </label>
+      </app-control-errors>
     </div>
 
     <div class="mb-3">

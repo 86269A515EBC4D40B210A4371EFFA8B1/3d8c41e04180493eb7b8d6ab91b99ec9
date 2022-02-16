@@ -7,17 +7,17 @@ import { RequiredComponent } from './errors/required.component';
   providedIn: 'root',
 })
 export class ControlErrorsService {
-  private supportedErrors = {
+  private supportedErrors: Record<string, Type<unknown>> = {
     required: RequiredComponent,
     email: EmailComponent,
     minlength: MinlengthComponent,
   };
 
-  isErrorSupported(error: string): error is keyof typeof this.supportedErrors {
+  isErrorSupported(error: string): boolean {
     return Object.keys(this.supportedErrors).includes(error);
   }
 
-  getErrorComponent(error: keyof typeof this.supportedErrors): Type<any> {
+  getErrorComponent(error: string): Type<unknown> {
     return this.supportedErrors[error];
   }
 }

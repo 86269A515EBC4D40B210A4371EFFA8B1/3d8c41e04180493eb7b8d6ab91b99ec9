@@ -33,7 +33,7 @@ export class ControlErrorsComponent {
         filter((error) => this.controlErrorsService.isErrorSupported(error)),
       )
       .subscribe((errorKey) => {
-        const componentToCreate = this.controlErrorsService.getErrorComponent(errorKey as any);
+        const componentToCreate = this.controlErrorsService.getErrorComponent(errorKey);
         const injector = Injector.create({
           providers: [{ provide: ERROR_DATA, useValue: this.control.getError(errorKey) }],
         });
