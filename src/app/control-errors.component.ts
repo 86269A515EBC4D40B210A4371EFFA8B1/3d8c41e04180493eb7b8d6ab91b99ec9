@@ -1,8 +1,9 @@
-import { Component, Injector, Input, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ContentChildren, Injector, Input, QueryList, ViewChild, ViewContainerRef } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { filter, mapTo, Observable, of, startWith, Subscription, switchMap, tap } from 'rxjs';
 import { ControlErrorsService } from './control-errors.service';
 import { ERROR_DATA } from './error.tokens';
+import { IfErrorDirective } from './if-error.directive';
 
 @Component({
   selector: 'app-control-errors',
@@ -17,6 +18,7 @@ export class ControlErrorsComponent {
   @Input() for?: string;
 
   @ViewChild('errorContainer', { read: ViewContainerRef, static: true }) errorContainer!: ViewContainerRef;
+  @ContentChildren(IfErrorDirective, { descendants: false }) ifErrorDirectives!: QueryList<IfErrorDirective>;
 
   private activeSubscription = new Subscription();
 
@@ -30,7 +32,11 @@ export class ControlErrorsComponent {
         tap(() => this.errorContainer.clear()),
         filter(() => this.control.errors !== null),
         switchMap(() => of(...Object.keys(this.control.errors!))),
-        filter((error) => this.controlErrorsService.isErrorSupported(error)),
+        filter(
+          (error) =>
+            this.controlErrorsService.isErrorSupported(error) &&
+            this.ifErrorDirectives.find((directive) => directive.errorKey === error) === undefined,
+        ),
       )
       .subscribe((errorKey) => {
         const componentToCreate = this.controlErrorsService.getErrorComponent(errorKey);
