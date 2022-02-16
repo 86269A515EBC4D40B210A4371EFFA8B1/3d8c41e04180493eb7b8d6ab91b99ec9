@@ -6,8 +6,8 @@
       <label for="email">Email</label>
       <input class="form-control" formControlName="email" id="email" autocomplete="off" />
       <app-control-errors [control]="form.get('email')!" for="email">
-        <label *appIfError="'maxlength' as error" class="d-block invalid-feedback">
-          Można wprowadzić maksymalnie {{ error.requiredLength }} znaków
+        <label *appIfError="'required'" class="d-block invalid-feedback">
+          Musisz podać adres email, aby potwierdzić swoją tożsamość.
         </label>
       </app-control-errors>
     </div>
