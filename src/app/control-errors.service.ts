@@ -14,7 +14,7 @@ export class ControlErrorsService {
   };
 
   isErrorSupported(error: string): boolean {
-    return Object.keys(this.supportedErrors).includes(error);
+    return this.supportedErrors[error] !== undefined;
   }
 
   getErrorComponent(error: string): Type<unknown> {
