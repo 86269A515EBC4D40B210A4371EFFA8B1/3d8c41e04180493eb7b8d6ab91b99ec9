@@ -6,9 +6,9 @@
       <label for="email">Email</label>
       <input class="form-control" formControlName="email" id="email" autocomplete="off" />
       <app-control-errors [control]="form.get('email')!" for="email">
-        <label *appIfError="'required'" class="d-block invalid-feedback">
+        <ng-template appControlError="required">
           Musisz podać adres email, aby potwierdzić swoją tożsamość.
-        </label>
+        </ng-template>
       </app-control-errors>
     </div>
 
@@ -22,11 +22,6 @@
       <label for="repeatedPassword">Repeat password</label>
       <input class="form-control" formControlName="repeatedPassword" id="repeatedPassword" autocomplete="off" />
       <app-control-errors [control]="form.get('repeatedPassword')!" for="repeatedPassword"></app-control-errors>
-      <app-control-errors [control]="form" for="repeatedPassword">
-        <label *appIfError="'passwordMatch'" class="d-block invalid-feedback">
-          Podane hasła nie pasują do siebie.
-        </label>
-      </app-control-errors>
     </div>
   </form>
 </div>

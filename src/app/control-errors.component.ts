@@ -1,58 +1,98 @@
-import { Component, ContentChildren, Injector, Input, QueryList, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ContentChildren,
+  Input,
+  OnDestroy,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { filter, mapTo, Observable, of, startWith, Subscription, switchMap, tap } from 'rxjs';
+import { filter, map, mapTo, Observable, ReplaySubject, startWith, switchMap } from 'rxjs';
+import { ControlErrorDirective } from './control-error.directive';
 import { ControlErrorsService } from './control-errors.service';
-import { ERROR_DATA } from './error.tokens';
-import { IfErrorDirective } from './if-error.directive';
 
 @Component({
   selector: 'app-control-errors',
   template: `
-    <ng-container #errorContainer></ng-container>
-    <ng-content></ng-content>
+    <label [for]="for" class="d-block invalid-feedback">
+      <ng-container #container></ng-container>
+    </label>
   `,
-  styles: [],
+  styles: [
+    `
+      label:empty {
+        display: none;
+      }
+    `,
+  ],
 })
-export class ControlErrorsComponent {
-  @Input() control!: AbstractControl;
+export class ControlErrorsComponent implements OnDestroy {
   @Input() for?: string;
+  @Input() set control(control: AbstractControl) {
+    this.control$.next(control);
+  }
 
-  @ViewChild('errorContainer', { read: ViewContainerRef, static: true }) errorContainer!: ViewContainerRef;
-  @ContentChildren(IfErrorDirective, { descendants: false }) ifErrorDirectives!: QueryList<IfErrorDirective>;
+  @ViewChild('container', { static: true, read: ViewContainerRef }) errorContainer!: ViewContainerRef;
+  @ContentChildren(ControlErrorDirective, { descendants: false }) controlErrors!: QueryList<ControlErrorDirective>;
 
-  private activeSubscription = new Subscription();
+  private contentInit$ = new ReplaySubject<void>(1);
+  private control$ = new ReplaySubject<AbstractControl>(1);
 
-  constructor(private controlErrorsService: ControlErrorsService) {}
+  constructor(private service: ControlErrorsService, private viewContainer: ViewContainerRef) {}
 
-  ngOnChanges() {
-    this.activeSubscription.unsubscribe();
-    this.activeSubscription = this.getControlChanges(this.control)
-      .pipe(
-        filter(() => this.control.pristine === false),
-        tap(() => this.errorContainer.clear()),
-        filter(() => this.control.errors !== null),
-        switchMap(() => of(...Object.keys(this.control.errors!))),
-        filter(
-          (error) =>
-            this.controlErrorsService.isErrorSupported(error) &&
-            this.ifErrorDirectives.find((directive) => directive.errorKey === error) === undefined,
-        ),
-      )
-      .subscribe((errorKey) => {
-        const componentToCreate = this.controlErrorsService.getErrorComponent(errorKey);
-        const injector = Injector.create({
-          providers: [{ provide: ERROR_DATA, useValue: this.control.getError(errorKey) }],
-        });
-        const ref = this.errorContainer.createComponent(componentToCreate, { injector });
-        this.errorContainer.insert(ref.hostView);
-      });
+  private errorSubscription = this.contentInit$
+    .pipe(
+      switchMap(() => this.control$),
+      switchMap((control) => this.getControlChanges(control)),
+      filter((control) => control.pristine === false),
+      map((control) => this.getErrorKeyAndData(control)),
+    )
+    .subscribe((data) => {
+      this.errorContainer.clear();
+      if (data === null) {
+        return;
+      }
+
+      const template = this.getTemplate(data[0]);
+      if (template) {
+        this.errorContainer.createEmbeddedView(template, { $implicit: data[1] });
+        return;
+      }
+
+      if (this.service.isErrorSupported(data[0])) {
+        const componentType = this.service.getErrorComponent(data[0]);
+        const componentRef = this.errorContainer.createComponent(componentType);
+        this.errorContainer.insert(componentRef.hostView);
+        return;
+      }
+    });
+
+  ngAfterContentInit() {
+    this.contentInit$.next();
+    this.contentInit$.complete();
   }
 
   ngOnDestroy() {
-    this.activeSubscription.unsubscribe();
+    this.errorSubscription.unsubscribe();
   }
 
-  private getControlChanges(control: AbstractControl): Observable<any> {
+  private getTemplate(errorKey: string): TemplateRef<{ $implicit: any }> | undefined {
+    const el = this.controlErrors.find((controlError) => controlError.errorKey === errorKey);
+    return el ? el.template : undefined;
+  }
+
+  private getErrorKeyAndData(control: AbstractControl): [string, any] | null {
+    if (control.errors === null) {
+      return null;
+    }
+    const errorKey = Object.keys(control.errors)[0];
+    const errorData = control.getError(errorKey);
+    return [errorKey, errorData];
+  }
+
+  private getControlChanges(control: AbstractControl): Observable<AbstractControl> {
     return control.valueChanges.pipe(startWith(control.value), mapTo(control));
   }
 }
