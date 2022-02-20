@@ -85,7 +85,7 @@ export class ControlErrorsComponent implements OnDestroy {
 
   private getErrorKeyAndData(control: AbstractControl): [string, any] | null {
     if (control.errors === null) {
-      return null;
+      return control.parent ? this.getErrorKeyAndData(control.parent) : null;
     }
     const errorKey = Object.keys(control.errors)[0];
     const errorData = control.getError(errorKey);
@@ -93,6 +93,7 @@ export class ControlErrorsComponent implements OnDestroy {
   }
 
   private getControlChanges(control: AbstractControl): Observable<AbstractControl> {
-    return control.valueChanges.pipe(startWith(control.value), mapTo(control));
+    const root = control.root ? control.root : control;
+    return root.valueChanges.pipe(startWith(root.value), mapTo(control));
   }
 }
