@@ -22,6 +22,9 @@
       <label for="repeatedPassword">Repeat password</label>
       <input class="form-control" formControlName="repeatedPassword" id="repeatedPassword" autocomplete="off" />
       <app-control-errors [control]="form.get('repeatedPassword')!" for="repeatedPassword"></app-control-errors>
+      <app-control-errors [control]="form" for="repeatedPassword">
+        <ng-template appControlError="passwordMatch">Pola nie pasują do siebie!</ng-template>
+      </app-control-errors>
     </div>
   </form>
 </div>
