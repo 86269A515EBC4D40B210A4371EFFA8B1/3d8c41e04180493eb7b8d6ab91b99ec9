@@ -1,5 +1,6 @@
 import { Injectable, Type } from '@angular/core';
 import { EmailComponent } from './errors/email.component';
+import { MaxlengthComponent } from './errors/maxlength.component';
 import { MinlengthComponent } from './errors/minlength.component';
 import { RequiredComponent } from './errors/required.component';
 
@@ -11,6 +12,7 @@ export class ControlErrorsService {
     required: RequiredComponent,
     email: EmailComponent,
     minlength: MinlengthComponent,
+    maxlength: MaxlengthComponent,
   };
 
   isErrorSupported(error: string): boolean {

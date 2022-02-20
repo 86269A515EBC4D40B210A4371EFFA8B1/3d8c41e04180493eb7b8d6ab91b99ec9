@@ -1,5 +1,4 @@
-import { Component, Host, Input, Optional } from '@angular/core';
-import { ControlErrorsComponent } from '../control-errors.component';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-required',

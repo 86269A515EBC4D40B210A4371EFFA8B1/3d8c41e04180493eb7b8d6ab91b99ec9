@@ -3,9 +3,9 @@ import { Component, Inject } from '@angular/core';
 type ErrorSchema = { requiredLength: number };
 
 @Component({
-  selector: 'app-minlength',
-  template: ` To pole musi składać się minimum z {{ error.requiredLength }} znaków `,
+  selector: 'app-maxlength',
+  template: ` To pole musi składać się maksymalnie z {{ error.requiredLength }} znaków `,
 })
-export class MinlengthComponent {
+export class MaxlengthComponent {
   constructor(@Inject('error') public error: ErrorSchema) {}
 }

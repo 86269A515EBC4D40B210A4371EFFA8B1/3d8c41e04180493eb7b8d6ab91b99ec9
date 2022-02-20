@@ -7,12 +7,14 @@ import { MinlengthComponent } from './errors/minlength.component';
 import { EmailComponent } from './errors/email.component';
 import { ControlErrorsComponent } from './control-errors.component';
 import { ControlErrorDirective } from './control-error.directive';
+import { MaxlengthComponent } from './errors/maxlength.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RequiredComponent,
     MinlengthComponent,
+    MaxlengthComponent,
     EmailComponent,
     ControlErrorsComponent,
     ControlErrorDirective,

@@ -1,29 +1,51 @@
 <div class="container mt-5">
-  <div class="alert alert-primary text-center" role="alert">Edytuj wartości w formularzu aby zobaczyć błędy</div>
-
   <form [formGroup]="form">
+    <h1 class="mb-5">Wykonaj przelew</h1>
     <div class="mb-3">
-      <label for="email">Email</label>
-      <input class="form-control" formControlName="email" id="email" autocomplete="off" />
-      <app-control-errors [control]="form.get('email')!" for="email">
-        <ng-template appControlError="required">
-          Musisz podać adres email, aby potwierdzić swoją tożsamość.
+      <label for="fromAccount">Z konta <span class="text-danger">*</span></label>
+      <select class="form-select" formControlName="fromAccount" id="fromAccount" autocomplete="off">
+        <option value="A">Konto A</option>
+        <option value="B">Konto B</option>
+      </select>
+
+      <app-control-errors [control]="form.get('fromAccount')!" for="fromAccount"></app-control-errors>
+    </div>
+
+    <div class="mb-3">
+      <label for="recipientsName">Nazwa odbiory <span class="text-danger">*</span></label>
+      <input class="form-control" formControlName="recipientsName" id="recipientsName" autocomplete="off" />
+      <app-control-errors [control]="form.get('recipientsName')!" for="recipientsName"></app-control-errors>
+    </div>
+
+    <div class="mb-3">
+      <label for="recipientsAccount">Numer rachunku <span class="text-danger">*</span></label>
+      <input class="form-control" formControlName="recipientsAccount" id="recipientsAccount" autocomplete="off" />
+      <app-control-errors [control]="form.get('recipientsAccount')!" for="recipientsAccount">
+        <ng-template appControlError="pattern">Wprowadzony numer rachunku zawiera niepoprawne znaki</ng-template>
+      </app-control-errors>
+    </div>
+
+    <div class="mb-3">
+      <label for="title">Tytuł przelewu <span class="text-danger">*</span></label>
+      <input class="form-control" formControlName="title" id="title" autocomplete="off" />
+      <app-control-errors [control]="form.get('title')!" for="title">
+        <ng-template appControlError="pattern">Tytuł przelewu nie może zawierać znaków specjalnych</ng-template>
+      </app-control-errors>
+    </div>
+
+    <div class="mb-3">
+      <label for="amount">Kwota przelewu <span class="text-danger">*</span></label>
+      <input class="form-control" formControlName="amount" id="amount" autocomplete="off" type="number" />
+      <app-control-errors [control]="form.get('amount')!" for="amount">
+        <ng-template appControlError="accountBalance" let-error>
+          Wprowadzona kwota nie może być większa niż posiadane środki na koncie. Obecnie posaidasz
+          {{ error.balance | currency: 'PLN' }} a wprowadzona kwota to {{ error.amount | currency: 'PLN' }}
         </ng-template>
       </app-control-errors>
     </div>
 
-    <div class="mb-3">
-      <label for="password">Password</label>
-      <input class="form-control" formControlName="password" id="password" autocomplete="off" />
-      <app-control-errors [control]="form.get('password')!" for="password"></app-control-errors>
-    </div>
-
-    <div class="mb-3">
-      <label for="repeatedPassword">Repeat password</label>
-      <input class="form-control" formControlName="repeatedPassword" id="repeatedPassword" autocomplete="off" />
-      <app-control-errors [control]="form.get('repeatedPassword')!" for="repeatedPassword">
-        <ng-template appControlError="passwordMatch">Pola nie pasują do siebie!</ng-template>
-      </app-control-errors>
+    <div class="text-end mt-5">
+      <button class="btn btn-primary" (click)="send()">Wykonaj</button>
     </div>
   </form>
 </div>

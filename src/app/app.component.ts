@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators, ValidationErrors } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -8,26 +8,48 @@ import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors }
 export class AppComponent {
   form = new FormGroup(
     {
-      email: new FormControl(null, [
+      fromAccount: new FormControl(null, [Validators.required]),
+      accountBalance: new FormControl(1_500, [Validators.required]),
+      recipientsName: new FormControl(null, [Validators.required, Validators.maxLength(10)]),
+      recipientsAccount: new FormControl(null, [
         Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(10),
-        Validators.email,
+        Validators.pattern(new RegExp('^[0-9]*$')),
+        Validators.minLength(26),
+        Validators.maxLength(26),
       ]),
-      password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
-      repeatedPassword: new FormControl(null, [Validators.required]),
+
+      title: new FormControl(null, [
+        Validators.required,
+        Validators.maxLength(150),
+        Validators.pattern(new RegExp('^[a-zA-Z0-9 ]*$')),
+      ]),
+      amount: new FormControl(null, [Validators.required, Validators.min(1)]),
     },
     {
-      validators: [passwordMatchValidator],
+      validators: [accountBalanceValidator],
     },
   );
+
+  send() {
+    if (!this.form.valid) {
+      for (const control of Object.values(this.form.controls)) {
+        control.markAsDirty();
+      }
+      this.form.updateValueAndValidity();
+      return;
+    }
+
+    alert('Success!');
+  }
 }
 
-function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
-  const password = control.get('password')!;
-  const repeatedPassword = control.get('repeatedPassword')!;
-  if (password.value !== repeatedPassword.value) {
-    return { passwordMatch: true };
+function accountBalanceValidator(control: AbstractControl): ValidationErrors | null {
+  const balance = control.get('accountBalance')!.value;
+  const amount = control.get('amount')!.value;
+  if (amount > balance) {
+    return {
+      accountBalance: { amount, balance },
+    };
   }
   return null;
 }

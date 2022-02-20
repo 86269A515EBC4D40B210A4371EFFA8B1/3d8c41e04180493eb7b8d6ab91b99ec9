@@ -1,6 +1,7 @@
 import {
   Component,
   ContentChildren,
+  Injector,
   Input,
   OnDestroy,
   QueryList,
@@ -63,7 +64,9 @@ export class ControlErrorsComponent implements OnDestroy {
 
       if (this.service.isErrorSupported(data[0])) {
         const componentType = this.service.getErrorComponent(data[0]);
-        const componentRef = this.errorContainer.createComponent(componentType);
+        const componentRef = this.errorContainer.createComponent(componentType, {
+          injector: Injector.create({ providers: [{ provide: 'error', useValue: data[1] }] }),
+        });
         this.errorContainer.insert(componentRef.hostView);
         return;
       }
