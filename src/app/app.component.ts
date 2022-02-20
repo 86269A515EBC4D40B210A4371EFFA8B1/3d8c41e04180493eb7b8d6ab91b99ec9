@@ -15,7 +15,7 @@ export class AppComponent {
         Validators.email,
       ]),
       password: new FormControl(null, [Validators.required, Validators.minLength(8)]),
-      repeatedPassword: new FormControl(null),
+      repeatedPassword: new FormControl(null, [Validators.required]),
     },
     {
       validators: [passwordMatchValidator],

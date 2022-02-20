@@ -21,6 +21,7 @@
     <div class="mb-3">
       <label for="repeatedPassword">Repeat password</label>
       <input class="form-control" formControlName="repeatedPassword" id="repeatedPassword" autocomplete="off" />
+      <app-control-errors [control]="form.get('repeatedPassword')!" for="repeatedPassword"></app-control-errors>
       <app-control-errors [control]="form" for="repeatedPassword">
         <label *appIfError="'passwordMatch'" class="d-block invalid-feedback">
           Podane hasła nie pasują do siebie.
