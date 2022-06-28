@@ -1,9 +1,12 @@
 <div class="container mt-5">
   <form [formGroup]="form">
-    <h1 class="mb-5">Wykonaj przelew</h1>
+    <h1>Wykonaj przelew</h1>
+    <p class="text-muted small mb-5">
+      Uzupełnij formularz, aby zobaczyć błędy</p>
     <div class="mb-3">
       <label for="fromAccount">Z konta <span class="text-danger">*</span></label>
       <select class="form-select" formControlName="fromAccount" id="fromAccount" autocomplete="off">
+        <option [value]="null">Wybierz konto</option>
         <option value="A">Konto A</option>
         <option value="B">Konto B</option>
       </select>
